@@ -1,1 +1,17 @@
+# Ignorer les fichiers générés automatiquement par macOS
 .DS_Store
+
+# Ignorer les exécutables compilés (sans extension)
+doubly_linked_list/doubly_linked_list
+linked_list/test
+queue/queue
+stack/stack
+
+# Ignorer tout fichier compilé sans extension à la racine ou dans les sous-dossiers
+*/*
+!*/*.c
+!*/*.h
+!*/*.md
+!*/*.txt
+!*/*.gitignore
+
