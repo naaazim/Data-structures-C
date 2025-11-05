@@ -25,4 +25,5 @@ int main(){
 
     // 5. Affichage de l’arbre
     display(&tree);
+    free_tree(&tree);
 }

@@ -55,26 +55,31 @@ Node *search_node(Node *node, int value){
     }
     return result;
 }
-// Fonction récursive d’affichage avec structure en arbre
-void display_node(const Node *node, int depth) {
+#include <stdio.h>
+#include "arbre.h"
+
+// Fonction récursive d’affichage stylisée
+void display_node(const Node *node, const char *prefix, int is_last) {
     if (node == NULL) return;
 
-    // Affichage du frère suivant à droite (pour que l’arbre "penche" à gauche)
-    display_node(node->next_sibling, depth);
+    // Affiche le préfixe et le symbole (├── ou └──)
+    printf("%s", prefix);
+    printf("%s%d\n", (is_last ? "└── " : "├── "), node->data);
 
-    // Indentation en fonction de la profondeur
-    for (int i = 0; i < depth; i++) {
-        printf("     "); // 5 espaces par niveau
+    // Nouveau préfixe pour les niveaux suivants
+    char new_prefix[256];
+    snprintf(new_prefix, sizeof(new_prefix), "%s%s", prefix, (is_last ? "    " : "│   "));
+
+    // Compte le nombre de fils pour savoir quand afficher └──
+    Node *child = node->first_child;
+    while (child) {
+        Node *next = child->next_sibling;
+        display_node(child, new_prefix, next == NULL);
+        child = next;
     }
-
-    // Affiche la valeur du nœud
-    printf("%d\n", node->data);
-
-    // Affichage du fils (sous le parent)
-    display_node(node->first_child, depth + 1);
 }
 
-// Fonction principale d’affichage de l’arbre
+// Fonction principale d’affichage
 void display(const Tree *tree) {
     if (tree == NULL || tree->root == NULL) {
         printf("L’arbre est vide.\n");
@@ -82,7 +87,33 @@ void display(const Tree *tree) {
     }
 
     printf("\nAffichage visuel de l’arbre :\n\n");
-    display_node(tree->root, 0);
+    printf("%d\n", tree->root->data); // racine
+    Node *child = tree->root->first_child;
+    while (child) {
+        Node *next = child->next_sibling;
+        display_node(child, "", next == NULL);
+        child = next;
+    }
 }
 
+// Fonction récursive pour libérer chaque nœud et ses descendants
+void free_node(Node *node) {
+    if (node == NULL) return;
 
+    // Libérer d'abord tous les enfants
+    free_node(node->first_child);
+
+    // Libérer ensuite tous les frères
+    free_node(node->next_sibling);
+
+    // Enfin, libérer le nœud lui-même
+    free(node);
+}
+
+// Fonction principale pour libérer tout l’arbre
+void free_tree(Tree *tree) {
+    if (tree == NULL || tree->root == NULL) return;
+
+    free_node(tree->root);
+    tree->root = NULL; // Sécurité : éviter un pointeur pendu
+}

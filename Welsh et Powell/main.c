@@ -7,7 +7,7 @@ int main() {
     // Format du fichier :
     // Ligne 1 : nombre de sommets
     // Puis matrice n×n de 0/1
-    GraphMatrix g = chargeGraphe("graphe.txt");
+    GraphMatrix g = chargeGraphe(NULL);
 
     // Afficher la matrice
     display_matrix(&g);

@@ -36,6 +36,7 @@
             (2). Insérer un élèment
             (3). Rechercher un élément
             (4). Afficher un arbre 
+            (5). Liberer l'espace alloué 
    */
 
    // Créer un nouvel arbre vide
@@ -49,5 +50,8 @@
 
    // Afficher un arbre
    void display(const Tree *tree);
+
+   //liberer l'espace alloué 
+   void free_tree(Tree *tree);
     
 #endif
